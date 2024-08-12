@@ -1,0 +1,41 @@
+services:
+  database:
+    container_name: ${APP_REF}_db
+    image: mariadb:11.3.2
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: ${APP_REF}
+    ports:
+      - '4306:3306'
+    volumes:
+     - ./mysql:/var/lib/mysql
+  php:
+    container_name: ${APP_REF}_php
+    build:
+      context: ./_docker/php
+    ports:
+      - "8800:8800"
+      # - 8443:443
+    volumes:
+      - ./_docker/apache/default.conf:/etc/apache2/sites-enabled/000-default.conf
+      - ./_docker/php/php.ini:/usr/local/etc/php/php.ini
+      - ./:/var/www
+    depends_on:
+      - database
+  phpma:
+    image: phpmyadmin/phpmyadmin
+    container_name: ${APP_REF}_pma
+    environment:
+      PMA_ARBITRARY: 1
+      PMA_HOST: ${APP_REF}_db
+      PMA_USER: root
+      PMA_PASSWORD: password
+      UPLOAD_LIMIT: 20M
+    ports:
+      - "8050:80"
+  mailer:
+    container_name: ${APP_REF}_mailer
+    image: axllent/mailpit
+    ports:
+      - "1025:1025"
+      - "8025:8025"

@@ -1,0 +1,20 @@
+{
+    "name": "mvwsocket/app",
+    "description": "php server socket",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Mvwsocket\\App\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Mathieu VIOT"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "cboden/ratchet": "^0.4.4"
+    }
+}
